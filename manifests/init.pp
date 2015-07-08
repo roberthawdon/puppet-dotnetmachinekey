@@ -11,10 +11,10 @@ class dotnetmachinekey (
       if ($osfamily == 'windows') and ($decryptionkey != undef) {
 
             file { 'machineKeys.ps1':
-                  path => "$tempdir/machineKeys.ps1",
-                  ensure => "file",
-                  source => template('dotnetmachinekey/machineKeys.ps1'),
-                  notify => Exec['setmachinekey']
+                  path    => "$tempdir/machineKeys.ps1",
+                  ensure  => "file",
+                  content => template('dotnetmachinekey/machineKeys.ps1'),
+                  notify  => Exec['setmachinekey']
             }
 
             exec { 'setmachinekey':
