@@ -11,7 +11,7 @@
 #
 #param ($readWrite = "read", $allkeys = $true, $version, $validationKey, $decryptionkey, $validation)
 
-param ($readWrite = "<%= scope['dotnetmachinekey::readwrite'] %>", $allkeys = $true, $version, $validationKey = "<%= scope['dotnetmachinekey::validationkey'] %>", $decryptionkey = "<%= scope['dotnetmachinekey::decruyptionkey'] %>", $validation = "<%= scope['dotnetmachinekey::validation'] %>")
+param ($readWrite = "<%= scope['dotnetmachinekey::readwrite'] %>", $allkeys = $true, $version, $validationKey = "<%= scope['dotnetmachinekey::validationkey'] %>", $decryptionkey = "<%= scope['dotnetmachinekey::decryptionkey'] %>", $validation = "<%= scope['dotnetmachinekey::validation'] %>")
 
 function GenKey ([int] $keylen) {
         $buff = new-object "System.Byte[]" $keylen
