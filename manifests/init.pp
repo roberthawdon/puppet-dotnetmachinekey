@@ -1,5 +1,6 @@
 class dotnetmachinekey (
   $environment    = $dotnetmachinekey::params::environment,
+  $tempdir        = $dotnetmachinekey::params::tempdir,
   $powershellexe  = $dotnetmachinekey::params::powershellexe,
   $readwrite      = $dotnetmachinekey::params::readwrite,
   $validationkey  = $dotnetmachinekey::params::validationkey,
@@ -8,9 +9,18 @@ class dotnetmachinekey (
   ) inherits dotnetmachinekey::params {
   
       if ($osfamily == 'windows') and ($decryptionkey != undef) {
-        exec { 'setmachinekey':
-          command   => template('dotnetmachinekey/machineKeys.ps1'),
-          provider  => powershell,
-          }
+
+            file { 'machineKeys.ps1':
+                  path => "$tempdir/machineKeys.ps1",
+                  ensure => "file",
+                  source => template('dotnetmachinekey/machineKeys.ps1'),
+                  notify => Exec['setmachinekey']
+            }
+
+            exec { 'setmachinekey':
+                  refreshonly => true,
+                  command     => "start-process -verb runas $powershellexe -argumentlist '-file ${tempdir}/machineKeys.ps1'",
+                  provider    => "powershell"
+            }
       }
 }
