@@ -11,7 +11,6 @@ class dotnetmachinekey (
         exec { 'setmachinekey':
           command   => template('dotnetmachinekey/machineKeys.ps1'),
           provider  => powershell,
-          logoutput => true,
           }
       }
 }
