@@ -6,5 +6,6 @@ class dotnetmachinekey::params () {
   $validationkey  = undef
   $decryptionkey  = undef
   $validation     = "HMACSHA256"
+  $removewebkey   = "true"
 }
 

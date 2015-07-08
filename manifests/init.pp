@@ -6,6 +6,7 @@ class dotnetmachinekey (
   $validationkey  = $dotnetmachinekey::params::validationkey,
   $decryptionkey  = $dotnetmachinekey::params::decryptionkey,
   $validation     = $dotnetmachinekey::params::validation,
+  $removewebkey   = $dotnetmachinekey::params::removewebkey,
   ) inherits dotnetmachinekey::params {
   
       if ($osfamily == 'windows') and ($decryptionkey != undef) {
@@ -20,6 +21,22 @@ class dotnetmachinekey (
             exec { 'setmachinekey':
                   refreshonly => true,
                   command     => "start-process -verb runas $powershellexe -argumentlist '-file ${tempdir}/machineKeys.ps1'",
+                  provider    => "powershell"
+            }
+      }
+
+      if ($osfamily == 'windows') and ($removewebkey == 'true') {
+
+            file { 'removeWebKeys.ps1':
+                  path    => "$tempdir/removeWebKeys.ps1",
+                  ensure  => "file",
+                  content => template('dotnetmachinekey/removeWebKeys.ps1'),
+                  notify  => Exec['removewebkey']
+            }
+
+            exec { 'removewebkey':
+                  refreshonly => true,
+                  command     => "start-process -verb runas $powershellexe -argumentlist '-file ${tempdir}/removeWebKeys.ps1'",
                   provider    => "powershell"
             }
       }
